@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+    database:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: mypassword
+        volumes:
+            - posedb:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+    
+    backend:
+        build: ./streaming
+        image: streaming
+        restart: always
+        environment:
+            PGHOST: database
+            PGPASSWORD: mypassword
+        volumes:
+            - storage:/usr/src/app/storage
+        ports:
+            - 3001:3000
+    
+    frontend:
+        build: ./poses
+        image: poses-app
+        restart: always
+        environment:
+            STREAM_HOST: localhost
+            STREAM_PORT: 3001
+        ports:
+            - 8080:3000
+
+volumes:
+    posedb:
+    storage:
