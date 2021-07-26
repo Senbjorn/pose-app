@@ -16,8 +16,12 @@ services:
         image: streaming
         restart: always
         environment:
-            PGHOST: database
+            PORT: 3000
+            PGUSER: postgres
             PGPASSWORD: mypassword
+            PGHOST: database
+            PGDATABASE_TEMP: template1
+            PGDATABASE: data
         volumes:
             - storage:/usr/src/app/storage
         ports:
